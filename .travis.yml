@@ -1,0 +1,26 @@
+env:
+  global:
+    - IMAGE_NAME=masterdatamgmt/importer
+
+services:
+  - docker
+
+branches:
+  only:
+    - master
+
+before_script:
+  - docker pull "$IMAGE_NAME" || true
+
+script:
+  - docker build --cache-from "${IMAGE_NAME}:latest" -t ${IMAGE_NAME}:latest .
+
+cache: npm
+
+before_deploy:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}:latest"
+  on:
+    branch: master

@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo:3.6.5-jessie
+    volumes:
+      - 'data:/data/db'
+  masterdata:
+    image: masterdatamgmt/full:latest
+    environment:
+        PROFILE: dev
+        DATABASE: "mongodb://mongodb/masterdata"
+        BASEPATH: "http://localhost:3000/"
+    volumes:
+      - 'img:/var/lib/app/img'
+    depends_on:
+      - mongodb
+    ports:
+      - 3000:3000
+  init:
+    build: .
+    depends_on:
+      - masterdata
+    environment:
+      URL: "http://masterdata:3000/"
+      USERNAME: "foo"
+      PASSWORD: "bar"
+      MODEL: |2
+        templates:
+          tags:
+            somethingTag:
+              name: "Something"
+          metrics:
+            simpleMetric:
+              name: "Simple"
+              tags:
+                - ":ref.somethingTag:"
+          documents:
+            myDocTemp:
+              name: "MyDocTemp"
+              identifier: "id"
+              metrics:
+                - ":ref.simpleMetric:"
+              attributes:
+                - name: "id"
+                  type: "String"
+        documents:
+          example:
+            name: "Example"
+            template: ":ref.myDocTemp:"
+            attributes:
+              - name: "id"
+                value: "12345"
+            metrics:
+              - identifier: ":ref.simpleMetric:"
+                key: "x"
+                tags:
+                  - identifier: ":ref.somethingTag:"
+                    value: "wuff"
+volumes:
+  data:
+  img:
