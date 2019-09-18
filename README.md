@@ -1,6 +1,8 @@
 # Masterdata Import Tool
 
-Ever dreamed of just creating an initial state of the Masterdata service? This tool is the solution! The importer used to initialize the Masterdata service. It executes the necessary commands to create entries and thus enables the preparation of the service. The main purpose is development setups with isolated masterdata instances.
+Ever dreamed of just creating an initial state of the [Masterdata](https://github.com/winner-potential/masterdata) service? This tool is the solution! The importer used to initialize the Masterdata service. It executes the necessary commands to create entries and thus enables the preparation of the service. The main purpose is development setups with isolated masterdata instances.
+
+[![Build Status](https://travis-ci.org/winner-potential/masterdata-importer.svg?branch=master)](https://travis-ci.org/winner-potential/masterdata-importer)
 
 ## Configuration
 
